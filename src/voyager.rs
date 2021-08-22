@@ -1,4 +1,3 @@
-use serde::{Deserialize};
 use async_trait::async_trait;
 use rand::{thread_rng, Rng};
 use std::iter;
@@ -8,22 +7,11 @@ pub struct Profile {
   pub user_identity: String,
 }
 
-// #[derive(Serialize, Deserialize)]
-// struct Obj {
-//     items: Vec<Issue>,
-// }
-
-// #[derive(Deserialize, Debug)]
-// struct Issue {
-//     title: String,
-// }
-
-
 #[async_trait]
 pub trait Voyager {
   fn new(&self) -> String;
   fn csrf(&self) -> String;
-  async fn request(&self) -> Result<String, reqwest::Error>;
+  async fn request(&self) -> Result<serde_json::Value, reqwest::Error>;
 }
 
 #[async_trait]
@@ -47,12 +35,12 @@ impl Voyager for Profile {
 
   // https://www.linkedin.com/voyager/api/identity/dash/profiles?q=memberIdentity&memberIdentity={}
   // &decorationId=com.linkedin.voyager.dash.deco.identity.profile.FullProfileWithEntities-84
-  async fn request(&self) -> Result<String, reqwest::Error> {
+  async fn request(&self) -> Result<serde_json::Value, reqwest::Error> {
     let csrf = self.csrf();
     let client = reqwest::Client::builder().gzip(true).build()?;
     let result = client
       .get(format!("https://www.linkedin.com/voyager/api/identity/dash/profiles?q=memberIdentity&memberIdentity={}&decorationId=com.linkedin.voyager.dash.deco.identity.profile.FullProfileWithEntities-84", self.user_identity))
-      .header("accept", "application/vnd.linkedin.normalized+json+2.1")
+      .header("accept", "application/json; charset=utf-8") // application/vnd.linkedin.normalized+json+2.1
       .header("accept-encoding", "gzip, deflate, br")
       .header("cache-control", "no-cache")
       .header("content-type", "application/json; charset=utf-8")
@@ -61,11 +49,13 @@ impl Voyager for Profile {
       .header("pragma", "no-cache")
       .send()
       .await?;
-    if !result.status().is_success() {
-      Ok(format!("error! bad li_at"))
-    } else {
-      let t = result.text_with_charset("utf-8").await?;
-      Ok(serde_json::from_str(&*t).unwrap())
+    match result.error_for_status() {
+      Ok(res) => {
+        let t = res.json::<serde_json::Value>().await?;
+        println!("{}", t);
+        Ok(t)
+      }
+      Err(e) => Err(e),
     }
   }
 }

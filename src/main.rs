@@ -36,7 +36,7 @@ async fn get_profile(profile: voyager::Profile) {
     let bar = ProgressBar::new(1000);
     println!("ok {}", profile.new());
     let profile_result = profile.request().await.unwrap();
-    println!("result {}", profile_result);
+    println!("result {}", profile_result.get("elements").unwrap());
     bar.inc(1);
     bar.finish();
 }
