@@ -2,6 +2,9 @@ mod voyager;
 
 use clap::{AppSettings, Clap};
 use indicatif::ProgressBar;
+use std::fs::File;
+use std::io::prelude::*;
+
 use voyager::*;
 
 /// This doc string acts as a help message when the user runs '--help'
@@ -30,15 +33,24 @@ enum SubCommand {
 struct Profile {
     /// User account you whant to parse
     user: String,
+    #[clap(short, long)]
+    output: Option<String>,
 }
 
-async fn get_profile(profile: voyager::Profile) {
+async fn get_profile(profile: voyager::Profile, output: Option<String>) {
     let bar = ProgressBar::new(1000);
     println!("ok {}", profile.new());
     let profile_result = profile.request().await.unwrap();
     println!("result {}", profile_result.get("elements").unwrap());
     bar.inc(1);
     bar.finish();
+    match output {
+        Some(path) => {
+            let mut w = File::create(format!("./out/{}", path)).unwrap();
+            writeln!(&mut w, "{}", format!("{}", profile_result)).unwrap();
+        }
+        None => println!("no path"),
+    }
 }
 
 #[tokio::main]
@@ -57,10 +69,13 @@ async fn main() {
             if t.user == "" {
                 return;
             }
-            get_profile(voyager::Profile {
-                li_at: opts.li_at,
-                user_identity: t.user,
-            })
+            get_profile(
+                voyager::Profile {
+                    li_at: opts.li_at,
+                    user_identity: t.user,
+                },
+                t.output,
+            )
             .await;
         }
     }
