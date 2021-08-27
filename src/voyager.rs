@@ -40,7 +40,7 @@ impl Voyager for Profile {
     let client = reqwest::Client::builder().gzip(true).build()?;
     let result = client
       .get(format!("https://www.linkedin.com/voyager/api/identity/dash/profiles?q=memberIdentity&memberIdentity={}&decorationId=com.linkedin.voyager.dash.deco.identity.profile.FullProfileWithEntities-84", self.user_identity))
-      .header("accept", "application/json; charset=utf-8") // application/vnd.linkedin.normalized+json+2.1
+      .header("accept", "application/vnd.linkedin.normalized+json+2.1") // application/vnd.linkedin.normalized+json+2.1
       .header("accept-encoding", "gzip, deflate, br")
       .header("cache-control", "no-cache")
       .header("content-type", "application/json; charset=utf-8")
@@ -52,7 +52,7 @@ impl Voyager for Profile {
     match result.error_for_status() {
       Ok(res) => {
         let t = res.json::<serde_json::Value>().await?;
-        println!("{}", t);
+        // println!("{}", t);
         Ok(t)
       }
       Err(e) => Err(e),

@@ -47,3 +47,7 @@ FLAGS:
     -h, --help       Print help information
     -V, --version    Print version information
 ```
+
+## Parsing rules
+
+Experiences : `"employmentTypeUrn": "urn:li:fsd_employmentType*`

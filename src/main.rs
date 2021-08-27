@@ -4,6 +4,7 @@ use clap::{AppSettings, Clap};
 use indicatif::ProgressBar;
 use std::fs::File;
 use std::io::prelude::*;
+use serde_json::json;
 
 use voyager::*;
 
@@ -38,16 +39,17 @@ struct Profile {
 }
 
 async fn get_profile(profile: voyager::Profile, output: Option<String>) {
-    let bar = ProgressBar::new(1000);
-    println!("ok {}", profile.new());
-    let profile_result = profile.request().await.unwrap();
-    println!("result {}", profile_result.get("elements").unwrap());
-    bar.inc(1);
-    bar.finish();
+    // let bar = ProgressBar::new(1000);
+    let profile_result: serde_json::Value = profile.request().await.unwrap();
+    println!("result {}", profile_result.get("included").unwrap());
+
+    let result: Vec<_> = profile_result.get("included").unwrap().as_array().unwrap().iter().filter(|x| x.get("employmentTypeUrn").is_some()).collect();
+    // // bar.inc(1);
+    // // bar.finish();
     match output {
         Some(path) => {
             let mut w = File::create(format!("./out/{}", path)).unwrap();
-            writeln!(&mut w, "{}", format!("{}", profile_result)).unwrap();
+            writeln!(&mut w, "{}", format!("{}", json!(result))).unwrap();
         }
         None => println!("no path"),
     }
