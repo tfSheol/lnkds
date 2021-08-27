@@ -50,4 +50,12 @@ FLAGS:
 
 ## Parsing rules
 
-Experiences : `"employmentTypeUrn": "urn:li:fsd_employmentType*`
+- Experiences: `"$type": "com.linkedin.voyager.dash.identity.profile.Position"`
+- Experiences_groups: `"$type": "com.linkedin.voyager.dash.identity.profile.PositionGroup"`
+- Medias: `"$type": "com.linkedin.voyager.dash.identity.profile.treasury.TreasuryMedia"`
+- Profile: `"publicIdentifier": "teddyfontaine"` + `"$type": "com.linkedin.voyager.dash.identity.profile.Profile"`
+- Educations: `"$type": "com.linkedin.voyager.dash.identity.profile.Education"`
+- Certifications: `"$type": "com.linkedin.voyager.dash.identity.profile.Certification"`
+- Skills: `"$type": "com.linkedin.voyager.dash.identity.profile.Skill"`
+- Projects: `"$type": "com.linkedin.voyager.dash.identity.profile.Project"`
+- Organizations: `"$type": "com.linkedin.voyager.dash.identity.profile.Organization"`

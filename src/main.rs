@@ -2,9 +2,10 @@ mod voyager;
 
 use clap::{AppSettings, Clap};
 use indicatif::ProgressBar;
+use serde::ser::Serialize;
+use serde_json::json;
 use std::fs::File;
 use std::io::prelude::*;
-use serde_json::json;
 
 use voyager::*;
 
@@ -38,12 +39,71 @@ struct Profile {
     output: Option<String>,
 }
 
+fn insert_item<T>(
+    map: &mut serde_json::Map<std::string::String, serde_json::Value>,
+    title: &str,
+    value: Option<&T>,
+) where
+    T: Serialize,
+{
+    if value.is_some() {
+        map.insert(
+            title.to_string(),
+            serde_json::to_value(value.unwrap()).unwrap(),
+        );
+    }
+}
+
 async fn get_profile(profile: voyager::Profile, output: Option<String>) {
     // let bar = ProgressBar::new(1000);
     let profile_result: serde_json::Value = profile.request().await.unwrap();
-    println!("result {}", profile_result.get("included").unwrap());
+    println!("result {}", profile_result.get("included").is_some());
 
-    let result: Vec<_> = profile_result.get("included").unwrap().as_array().unwrap().iter().filter(|x| x.get("employmentTypeUrn").is_some()).collect();
+    // let result: Vec<_> = profile_result.get("included").unwrap().as_array().unwrap().iter().filter(|x| x.get("employmentTypeUrn").is_some()).collect();
+    let result: Vec<_> = profile_result
+        .get("included")
+        .unwrap()
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|x| {
+            x.get("$type")
+                .unwrap()
+                .as_str()
+                .unwrap()
+                .eq("com.linkedin.voyager.dash.identity.profile.Position")
+        })
+        .map(|p| {
+            let mut map = serde_json::Map::new();
+            insert_item(
+                &mut map,
+                "starts_at",
+                Some(&json!({
+                    "month": p.get("dateRange").unwrap().get("start").unwrap().get("month").unwrap(),
+                    "year": p.get("dateRange").unwrap().get("start").unwrap().get("year").unwrap()
+                })),
+            );
+            insert_item(
+                &mut map,
+                "company_linkedin_profile_url",
+                Some(&format!("https://fr.linkedin.com/company/{}", "")),
+            );
+            insert_item(&mut map, "company", p.get("companyName"));
+            insert_item(&mut map, "title", p.get("title"));
+            insert_item(&mut map, "description", p.get("description"));
+            insert_item(&mut map, "location", p.get("locationName"));
+            insert_item(&mut map, "logo_url", Some(&format!("{}", "")));
+            if p.get("dateRange").unwrap().get("end").is_some() {
+                map.insert(
+                    "ends_at".to_string(),
+                    json!({
+                    "month": p.get("dateRange").unwrap().get("end").unwrap().get("month").unwrap(),
+                    "year": p.get("dateRange").unwrap().get("end").unwrap().get("year").unwrap()}),
+                );
+            }
+            json!(map)
+        })
+        .collect();
     // // bar.inc(1);
     // // bar.finish();
     match output {
