@@ -4,7 +4,9 @@
     },
     "github": {
         "release": true,
-        "assets": ["target/release/lnkds"]
+        "assets": [
+            "target/release/lnkds"
+        ]
     },
     "hooks": {
         "before:init": "export $(grep -v '^#' .env | xargs -d '\n')",
@@ -22,6 +24,10 @@
                 "file": "Cargo.toml",
                 "path": "package.version"
             }
+        },
+        "@release-it/keep-a-changelog": {
+            "filename": "CHANGELOG.md",
+            "strictLatest": true
         }
     }
 }
