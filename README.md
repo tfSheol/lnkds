@@ -1,7 +1,8 @@
 <p align="center">
     <img src="./assets/logo.svg">
     <br /><br />
-    <img src="https://img.shields.io/badge/Made%20with-Rust-orange.svg">
+    <img alt="Make with Rust" src="https://img.shields.io/badge/Made%20with-Rust-orange.svg">
+    <img alt="GitHub license" src="https://img.shields.io/github/license/tfsheol/lnkds">
     <a href="https://GitHub.com/tfSheol/lnkds/releases"><img src="https://img.shields.io/github/release/tfSheol/lnkds.svg"></a>
     <a href="https://github.com/tfSheol/lnkds/commits"><img alt="GitHub commits since latest release (by date)" src="https://img.shields.io/github/commits-since/tfSheol/lnkds/latest"></a>
     <p align="center">Scrapp all informations you whant of linkedIn profile's. 🚀</p>
@@ -81,10 +82,29 @@ This project support `@release-it` with 2 plugins `@release-it/keep-a-changelog`
 - [@release-it/keep-a-changelog](https://github.com/release-it/keep-a-changelog)
 - [@release-it/bumper](https://github.com/release-it/bumper)
 
+### # Installation
+
 ```bash
 $ sudo npm install -g release-it
 $ sudo npm install -g @release-it/keep-a-changelog
 $ sudo npm install -g 
+```
+
+### # Make a realease from project
+
+```bash
+$ git clone git@github.com:tfSheol/lnkds.git
+$ cd lnkds
+# Prefere to use makefile for it
+$ release-it
+
+🚀 Let's release lnkds (currently at 0.1.1)
+
+Changelog:
+* add changelog support
+
+? Select increment (next version): patch (0.1.2)
+...
 ```
 
 ## Voyager api limitations
@@ -93,6 +113,7 @@ $ sudo npm install -g
 
 ## Todos
 
+- [ ] Rework code architecture 👀
 - [x] Implementation of user experiences
 - [ ] Implementation of user experiences by groups
 - [ ] Implementation of experiences medias
