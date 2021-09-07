@@ -5,7 +5,9 @@
     "github": {
         "release": true,
         "assets": [
-            "target/release/lnkds"
+            "target/release/lnkds",
+            "CHANGELOG.md",
+            "LICENSE"
         ]
     },
     "hooks": {

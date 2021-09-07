@@ -3,9 +3,12 @@
     <br /><br />
     <img alt="Make with Rust" src="https://img.shields.io/badge/Made%20with-Rust-orange.svg">
     <img alt="GitHub license" src="https://img.shields.io/github/license/tfSheol/lnkds">
+    <img alt="Make with Rust" src="https://img.shields.io/badge/Code%20with-VSCode-blue.svg">
+    <img alt="Make with Rust" src="https://img.shields.io/badge/Build%20on-WSL2-purple.svg">
+    <br />
     <a href="https://GitHub.com/tfSheol/lnkds/releases"><img src="https://img.shields.io/github/release/tfSheol/lnkds.svg"></a>
     <a href="https://github.com/tfSheol/lnkds/commits"><img alt="GitHub commits since latest release (by date)" src="https://img.shields.io/github/commits-since/tfSheol/lnkds/latest"></a>
-    <p align="center">Scrapp all informations you whant of linkedIn profile's. 🚀</p>
+    <p align="center">Scrape all informations you whant of linkedIn profile's. 🚀</p>
     <p align="center">Work since 📅 <b>08/22/2021</b></p>
     <br />
 </p>
@@ -42,7 +45,7 @@ SUBCOMMANDS:
 
 ## lnkds-profile
 
-Scrapp a full linkedin profile with basic informations, experiences, educations, certifications, skills, projects and organizations.
+Scrape a full linkedin profile with basic informations, experiences, educations, certifications, skills, projects and organizations.
 
 ```bash
 $ lnkds <AQE...> profile <tf...> --help
