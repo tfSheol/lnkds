@@ -2,7 +2,7 @@
     <img src="./assets/logo.svg">
     <br /><br />
     <img alt="Make with Rust" src="https://img.shields.io/badge/Made%20with-Rust-orange.svg">
-    <img alt="GitHub license" src="https://img.shields.io/github/license/tfsheol/lnkds">
+    <img alt="GitHub license" src="https://img.shields.io/github/license/tfSheol/lnkds">
     <a href="https://GitHub.com/tfSheol/lnkds/releases"><img src="https://img.shields.io/github/release/tfSheol/lnkds.svg"></a>
     <a href="https://github.com/tfSheol/lnkds/commits"><img alt="GitHub commits since latest release (by date)" src="https://img.shields.io/github/commits-since/tfSheol/lnkds/latest"></a>
     <p align="center">Scrapp all informations you whant of linkedIn profile's. 🚀</p>
