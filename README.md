@@ -5,7 +5,7 @@ Scrapp all informations you whant of linkedIn profile's.
 ```bash
 $ lnkds --help
 
-lnkds 1.0
+lnkds 0.1.2
 
 Teddy F. <pro@teddyfontaine.fr>
 
@@ -59,3 +59,33 @@ FLAGS:
 - Skills: `"$type": "com.linkedin.voyager.dash.identity.profile.Skill"`
 - Projects: `"$type": "com.linkedin.voyager.dash.identity.profile.Project"`
 - Organizations: `"$type": "com.linkedin.voyager.dash.identity.profile.Organization"`
+
+## Realase
+
+This project support `@release-it` with 2 plugins `@release-it/keep-a-changelog` and `@release-it/bumper`.
+
+- [@release-it](https://github.com/release-it/release-it)
+- [@release-it/keep-a-changelog](https://github.com/release-it/keep-a-changelog)
+- [@release-it/bumper](https://github.com/release-it/bumper)
+
+```bash
+$ sudo npm install -g release-it
+$ sudo npm install -g @release-it/keep-a-changelog
+$ sudo npm install -g 
+```
+
+## Voyager api limitations
+
+- This api can't getted over 18 experiences.
+
+## Todos
+
+- [x] Implementation of user experiences
+- [ ] Implementation of user experiences by groups
+- [ ] Implementation of experiences medias
+- [ ] Implementation of user profile
+- [ ] Implementation of user educations
+- [ ] Implementation of user certifications
+- [ ] Implementation of user skills
+- [ ] Implementation of user projects
+- [ ] Implementation of user organizations
