@@ -1,6 +1,6 @@
 mod voyager;
 
-use clap::{AppSettings, Clap};
+use clap::{AppSettings, crate_version, Clap};
 use indicatif::ProgressBar;
 use serde::ser::Serialize;
 use serde_json::json;
@@ -12,7 +12,7 @@ use voyager::*;
 /// This doc string acts as a help message when the user runs '--help'
 /// as do all doc strings on fields
 #[derive(Clap)]
-#[clap(version = "1.0", author = "Teddy F. <pro@teddyfontaine.fr>")]
+#[clap(version = crate_version!(), author = "Teddy F. <pro@teddyfontaine.fr>")]
 #[clap(setting = AppSettings::ColoredHelp)]
 struct Opts {
     /// "li_at" from LinkedIn Cookie
@@ -109,7 +109,12 @@ async fn get_profile(profile: voyager::Profile, output: Option<String>) {
     match output {
         Some(path) => {
             let mut w = File::create(format!("./out/{}", path)).unwrap();
-            writeln!(&mut w, "{}", format!("{}", json!(result))).unwrap();
+            writeln!(
+                &mut w,
+                "{}",
+                format!("{}", json!({ "experiences": result }))
+            )
+            .unwrap();
         }
         None => println!("no path"),
     }

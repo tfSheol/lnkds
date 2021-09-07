@@ -1,0 +1,26 @@
+{
+    "git": {
+        "commitMessage": "release v${version}"
+    },
+    "github": {
+        "release": true,
+        "assets": ["dist/*.zip"]
+    },
+    "hooks": {
+        "before:init": "source .env",
+        "after:git:release": "echo After git push, before github release",
+        "after:release": "echo Successfully released ${name} v${version}."
+    },
+    "plugins": {
+        "@release-it/bumper": {
+            "in": {
+                "file": "version",
+                "type": "text/toml"
+            },
+            "out": {
+                "file": "version",
+                "type": "text/toml"
+            }
+        }
+    }
+}
