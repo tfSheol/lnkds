@@ -4,10 +4,11 @@
     },
     "github": {
         "release": true,
-        "assets": ["dist/*.zip"]
+        "assets": ["target/release/lnkds"]
     },
     "hooks": {
-        "before:init": "source .env",
+        "before:init": ". ./.env",
+        "before:build": "cargo build --release",
         "after:git:release": "echo After git push, before github release",
         "after:release": "echo Successfully released ${name} v${version}."
     },
