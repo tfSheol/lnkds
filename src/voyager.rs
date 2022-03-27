@@ -12,6 +12,8 @@ pub trait Voyager {
   fn new(&self) -> String;
   fn csrf(&self) -> String;
   async fn request(&self) -> Result<serde_json::Value, reqwest::Error>;
+  async fn me(&self) -> Result<serde_json::Value, reqwest::Error>;
+  async fn experiences(&self, entity: String) -> Result<serde_json::Value, reqwest::Error>;
   // fn getExperiences() -> Vec<_>;
 }
 
@@ -32,6 +34,47 @@ impl Voyager for Profile {
       .take(19)
       .collect();
     rand_string
+  }
+
+  async fn me(&self) -> Result<serde_json::Value, reqwest::Error> {
+    let csrf = self.csrf();
+    let client = reqwest::Client::builder().gzip(true).build()?;
+    let result = client
+    .get("https://www.linkedin.com/voyager/api/me")
+    .header("accept", "application/vnd.linkedin.normalized+json+2.1")
+    .header("accept-encoding", "gzip, deflate, br")
+    .header("accept-language", "en-FR,en;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6")
+    .header("cookie", format!("li_at={}; JSESSIONID=\"ajax:{}\"", self.li_at, csrf))
+    .header("csrf-token", format!("ajax:{}", csrf))
+    .header("pragma", "no-cache")
+    .header("x-restli-protocol-version", "2.0.0")
+    .send()
+    .await?;
+    match result.error_for_status() {
+      Ok(res) => Ok(res.json::<serde_json::Value>().await?),
+      Err(e) => Err(e),
+    }
+  }
+
+  async fn experiences(&self, entity: String) -> Result<serde_json::Value, reqwest::Error> {
+    let csrf = self.csrf();
+    let client = reqwest::Client::builder().gzip(true).build()?;
+    println!("{}", entity);
+    let result = client
+      .get(format!("https://www.linkedin.com/voyager/api/voyagerIdentityGraphQL?variables=(profileUrn:urn%3Ali%3Afsd_profile%3A{},sectionType:experience)&&queryId=voyagerIdentityDashProfileComponents.1b81c8fd4bc5d26c55be2e1ce3e11a68", entity.to_string().replace("\"", "")))
+      .header("accept", "application/vnd.linkedin.normalized+json+2.1")
+      .header("accept-encoding", "gzip, deflate, br")
+      .header("accept-language", "en-FR,en;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6")
+      .header("cookie", format!("li_at={}; JSESSIONID=\"ajax:{}\"", self.li_at, csrf))
+      .header("csrf-token", format!("ajax:{}", csrf))
+      .header("pragma", "no-cache")
+      .header("x-restli-protocol-version", "2.0.0")
+      .send()
+      .await?;
+    match result.error_for_status() {
+      Ok(res) => Ok(res.json::<serde_json::Value>().await?),
+      Err(e) => Err(e),
+    }
   }
 
   // https://www.linkedin.com/voyager/api/identity/dash/profiles?q=memberIdentity&memberIdentity={}
